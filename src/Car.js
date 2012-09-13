@@ -209,12 +209,18 @@
                         this.currentPosition = position;
 			this.currentAngle = angle;
 
+                        carSet.click(this.click.bind(this));
+
 			return carSet;
 		},
 
 		paper : function() {
 			return this.options.paper;
 		},
+
+                click : function(){
+                        this.model.get("position").get("views")[0].click();
+                },
 
 		foo : function() {
 		    console.log("foo");
@@ -245,6 +251,8 @@
 			this.carSpeedNumber = this.paper().text(
 				position.x, position.y, speed
 			);
+                        this.carSpeedNumber.click(this.click.bind(this));
+
 
 			if (this.carGlow != undefined)
 				this.carGlow.remove();

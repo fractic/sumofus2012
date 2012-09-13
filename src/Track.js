@@ -484,6 +484,10 @@
 			return this.options.paper;
 		},
 
+                click : function(){
+                        this.options.callback(this.model);
+                },
+
 		render : function() {
 			if (this.trackGlow != undefined)
 				this.trackGlow.remove();
