@@ -248,5 +248,91 @@
 
     });
 
+    var ScoreView = Backbone.View.extend({
+        initialize : function(){
+            this.scoreBoxes = this.createView();
+            this.model.bind("change", function(){
+                this.render();
+            }, this);
+        },
+
+        createView : function(){
+            var x = this.options.x;
+            var y = this.options.y;
+            var height = this.options.height;
+            var nrTeams = this.model.get("numberOfTeams");
+            var boxSize = (height-30-5*(nrTeams-1))/nrTeams;
+            this.scoreText = this.paper().text(x+40,y+10,"Score:");
+            this.scoreText.transform("S3");
+            
+            var colorBoxes = [];
+            var scoreBoxes = [];
+            for(var i = 0; i < nrTeams; i++){
+                var colorBox = this.paper().rect(x,y+30+i*(boxSize+5),boxSize,boxSize);
+                colorBox.attr("stroke","black");
+                colorBox.attr("fill",this.model.get("playerCars")[i][0].get("color"));
+                colorBoxes.push(colorBox);
+
+                var scoreBox = this.paper().text(x+boxSize/2,
+                                                 y+30+i*(boxSize+5)+boxSize/2,
+                                                  "0");
+                scoreBox.transform("S3");
+                scoreBoxes.push(scoreBox);
+            }
+            return scoreBoxes;
+        },
+
+
+        render : function(){
+            var nrCars = this.model.get("carsPerTeam");
+            var scores = this.model.get("scores");
+            for(var i = 0; i < scores.length; i++){
+               var teamscore = 0;
+               for(var j = 0; j < nrCars; j++){
+                   teamscore += scores[i][j];
+               }
+               this.scoreBoxes[i].attr("text",""+teamscore);
+            }
+
+        },
+
+        paper : function(){
+            return this.options.paper;
+        }
+    });
+
+    var RoundView = Backbone.View.extend({
+        initialize : function(){
+            this.text = this.createView();
+            this.model.bind("change:roundsCompleted", function(){
+                this.render();
+            }, this);
+        },
+
+        createView : function(){
+            var round = this.model.get("roundsCompleted");
+            var text = this.paper().text(this.options.x, this.options.y, "Ronde: "+round);
+            text.transform("S3");
+            return text;
+        },
+
+        render : function(){
+            var round = this.model.get("roundsCompleted");
+            this.text.attr("text", "Ronde: "+round);
+            return this;
+        },
+
+        paper : function(){
+            return this.options.paper;
+        }
+        
+    });
+
+
+
     SumOfUs.Game = Game;
+    SumOfUs.ScoreView = ScoreView;
+    SumOfUs.RoundView = RoundView;
+
+
 })(_, Backbone, SumOfUs);

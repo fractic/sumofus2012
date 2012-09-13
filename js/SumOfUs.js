@@ -18,21 +18,27 @@
 
 	var roads = [];
 	var crossings = [];
-	roads.push(demoTrack.addSegment("road", {width : 4, length : 9}));
-	roads.push(demoTrack.addSegment("road", {width : 4, length : 3}));
-	roads.push(demoTrack.addSegment("road", {width : 4, length : 3}));
+	roads.push(demoTrack.addSegment("road", {width : 4, length : 9, checkpoint : "A"}));
+	roads.push(demoTrack.addSegment("road", {width : 4, length : 3, checkpoint :"B"}));
+	roads.push(demoTrack.addSegment("road", {width : 4, length : 3, checkPoint :"B"}));
 	for(var i = 0; i < 6; i++){
-	    roads.push(demoTrack.addSegment("road", {width : 4, length : 3, npcTraffic : "twoway"}));
+	    roads.push(demoTrack.addSegment("road", {width : 4, 
+                                                     length : 3, 
+                                                     npcTraffic : "twoway", 
+                                                     checkpoint :"C"}));
 	}
 	for(var i = 0; i < 3; i++){
-	    roads.push(demoTrack.addSegment("road", {width : 3, length : 5}));
+	    roads.push(demoTrack.addSegment("road", {width : 3, length : 5, checkpoint : "D"}));
 	}
 	for(var i = 0; i < 6; i++){
-	    roads.push(demoTrack.addSegment("road", {width : 4, length : 3, npcTraffic : "twoway"}));
+	    roads.push(demoTrack.addSegment("road", {width : 4, 
+                                                     length : 3, 
+                                                     npcTraffic : "twoway",
+                                                     checkpoint : "E"}));
 	}
-	roads.push(demoTrack.addSegment("road", {width : 4, length : 3}));
-	roads.push(demoTrack.addSegment("road", {width : 4, length : 3}));
-	roads.push(demoTrack.addSegment("road", {width : 4, length : 9}));
+	roads.push(demoTrack.addSegment("road", {width : 4, length : 3, checkpoint : "F"}));
+	roads.push(demoTrack.addSegment("road", {width : 4, length : 3, checkpoint : "F"}));
+	roads.push(demoTrack.addSegment("road", {width : 4, length : 9, checkpoint : "G"}));
 
 	crossings.push(demoTrack.addSegment("crossing", {width : 4, height : 4}));
 	crossings.push(demoTrack.addSegment("crossing", {width : 4, height : 4}));
@@ -153,7 +159,10 @@
 		track : demoTrack, 
 		numberOfTeams : 4, 
 		carsPerTeam : 2,
-		secondsPerMove : 30
+		secondsPerMove : 30,
+                pointsPerCheckpoint : 1,
+                checkpointOrder:["C","D","E","F","G","F","E","D","C","B","A"]
+
 	});
 
 
@@ -292,6 +301,18 @@
 			     y : 50,
 			     height : 15,
 			     width : 100 });
+
+        var roundView = new SumOfUs.RoundView({ model : demoGame,
+                                                paper : paper,
+                                                x : 900,
+                                                y : 100});
+ 
+        var scoreView = new SumOfUs.ScoreView({ model : demoGame,
+                                                paper : paper,
+                                                x : 10,
+                                                y : 10,
+                                                height : 200});
+        window.game = demoGame;
 
 
 
