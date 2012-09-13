@@ -14,7 +14,7 @@
         var paper = Raphael("viewport", 1300, 830);
         paper.rect(0, 0, 1300, 830).attr({ fill : "#ffffff" });
 
-	var demoTrack = new SumOfUs.Track({npcMaxSpeed : 4,npcDelayChance: 0.08});
+	var demoTrack = new SumOfUs.Track({npcMaxSpeed : 4,npcDelayChance: 0.12});
 
 	var roads = [];
 	var crossings = [];
@@ -110,12 +110,16 @@
 	demoTrack.addNonPlayerCar(roads[4].get("nodes")[1][1]);
 	demoTrack.addNonPlayerCar(crossings[3].get("nodes")[0][1]);
 	demoTrack.addNonPlayerCar(crossings[3].get("nodes")[1][3]);
+	demoTrack.addNonPlayerCar(crossings[3].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(crossings[3].get("nodes")[3][0]);
+	demoTrack.addNonPlayerCar(roads[5].get("nodes")[0][0]);
 	demoTrack.addNonPlayerCar(roads[5].get("nodes")[1][1]);
 	demoTrack.addNonPlayerCar(crossings[4].get("nodes")[3][1]);
 	demoTrack.addNonPlayerCar(crossings[4].get("nodes")[0][1]);
+	demoTrack.addNonPlayerCar(crossings[4].get("nodes")[2][2]);
 	demoTrack.addNonPlayerCar(roads[6].get("nodes")[2][1]);
 	demoTrack.addNonPlayerCar(roads[6].get("nodes")[1][2]);
+	demoTrack.addNonPlayerCar(roads[6].get("nodes")[1][3]);
 	demoTrack.addNonPlayerCar(crossings[5].get("nodes")[0][3]);
 	demoTrack.addNonPlayerCar(crossings[5].get("nodes")[1][3]);
 	demoTrack.addNonPlayerCar(crossings[5].get("nodes")[3][1]);
@@ -140,19 +144,23 @@
 	demoTrack.addNonPlayerCar(roads[14].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(roads[14].get("nodes")[2][2]);
 	demoTrack.addNonPlayerCar(roads[14].get("nodes")[2][3]);
+	demoTrack.addNonPlayerCar(crossings[9].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(crossings[9].get("nodes")[2][1]);
 	demoTrack.addNonPlayerCar(roads[15].get("nodes")[1][3]);
 	demoTrack.addNonPlayerCar(roads[15].get("nodes")[2][2]);
 	demoTrack.addNonPlayerCar(roads[15].get("nodes")[0][0]);
 	demoTrack.addNonPlayerCar(crossings[10].get("nodes")[0][2]);
 	demoTrack.addNonPlayerCar(crossings[10].get("nodes")[2][0]);
+	demoTrack.addNonPlayerCar(crossings[10].get("nodes")[2][3]);
 	demoTrack.addNonPlayerCar(crossings[10].get("nodes")[3][2]);
+	demoTrack.addNonPlayerCar(roads[16].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(roads[16].get("nodes")[2][1]);
 	demoTrack.addNonPlayerCar(roads[16].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(crossings[11].get("nodes")[0][1]);
 	demoTrack.addNonPlayerCar(crossings[11].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(crossings[11].get("nodes")[3][2]);
 	demoTrack.addNonPlayerCar(roads[17].get("nodes")[1][1]);
+	demoTrack.addNonPlayerCar(roads[17].get("nodes")[0][3]);
 
 
 	var demoGame = new SumOfUs.Game({

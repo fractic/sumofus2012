@@ -152,6 +152,24 @@
 
 	completedARound : function(){
 	    this.get("track").advanceNonPlayerCars();
+
+            //VERY TEMPORARY HACK REMOVE THIS!!!!!
+            var rounds = this.get("roundsCompleted");
+            var nrTeams = this.get("numberOfTeams");
+            var nrCars = this.get("carsPerTeam");
+            for(var i = 0; i < nrTeams; i++){
+                for(var j = 0; j < nrCars; j++){
+                    if(Math.random() < rounds*0.01){
+                        console.log("upgraded: ", i,j);
+                        this.giveSpeedUpgradeTo(i,j);
+                    }
+                    if(Math.random() < rounds*0.01){
+                        console.log("upgraded: ", i,j);
+                        this.giveAccelerationUpgradeTo(i,j);
+                    }
+                }
+            }
+
 	},
 
 	playerClickedOnNode : function(node){
