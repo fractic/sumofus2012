@@ -33,9 +33,10 @@
 
 	    this.set({"speed" : resultSpeed});
 	    if( resultSpeed == 0 && !this.get("npc") ){
-	        //undefined direction represents standing still so the car can turn around.
+	        //neutral direction represents standing still so the car can turn around.
 		//npc cars should not turn around and just stick to the track.
-	        this.set({"direction" : undefined});
+	        //this.set({"direction" : undefined});
+	        this.set({"direction" : SumOfUs.NEUTRAL_DIRECTION});
 	    }
 	},
 
@@ -51,7 +52,7 @@
   	            throw "Can't move to an occupied position";
 		}
 	    }
-	    if(direction != undefined && position.get("directions").indexOf(direction) == -1){
+	    if(direction != SumOfUs.NEUTRAL_DIRECTION && position.get("directions").indexOf(direction) == -1){
 	        throw "Can't move in that direction";
 	    }
 	    var currentPos = this.get("position");

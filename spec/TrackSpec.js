@@ -6,7 +6,7 @@ describe("a TrackNode", function() {
 	var connections = node.get("connections");
 	expect(node).not.toBeOccupied();
 	expect(node).not.toBeHighlighted();
-	expect(directions).toEqual([]);
+	expect(directions).toEqual([SumOfUs.NEUTRAL_DIRECTION]);
 	expect(connections).toEqual([]);
 	expect(node).not.toBeACheckpoint();
         expect(node.get("views")).toEqual([]);
@@ -70,26 +70,27 @@ describe("a TrackNode", function() {
 	expect(links3E).toEqual([{ node : node1, direction : "B"}]);
     });
 
-    it("should return all connections for undefined direction, expect for the npc direction", function(){
-        var npcdir = SumOfUs.NPC_DIRECTION;
-        var node1 = new SumOfUs.TrackNode({ directions : ["A", "B", "C", npcdir] });
-	var node2 = new SumOfUs.TrackNode({ directions : ["D"] });
-	var node3 = new SumOfUs.TrackNode({ directions : ["E"] });
-	var node4 = new SumOfUs.TrackNode({ directions : ["F"] });
-	var node5 = new SumOfUs.TrackNode({ directions : [npcdir] });
-
-	node1.connectTo(node2).along("A", "D");
-	node1.connectTo(node3).along("B", "E");
-	node1.connectTo(node4).along("C", "F");
-	node1.connectTo(node5).along(npcdir);
-
-	var links = node1.links(undefined);
-	expect(links.length).toEqual(3);
-	expect(node1).toBeConnectedTo(node2, undefined, "D");
-	expect(node1).toBeConnectedTo(node3, undefined, "E");
-	expect(node1).toBeConnectedTo(node4, undefined, "F");
-	expect(links).not.toContainSomethingWithProperties({node : node5});
-    });
+//    it("should return all connections for neutral direction, expect for the npc direction", function(){
+//        var npcdir = SumOfUs.NPC_DIRECTION;
+//	var neutraldir = SumOfUs.NEUTRAL_DIRECTION;
+//        var node1 = new SumOfUs.TrackNode({ directions : ["A", "B", "C", npcdir] });
+//	var node2 = new SumOfUs.TrackNode({ directions : ["D"] });
+//	var node3 = new SumOfUs.TrackNode({ directions : ["E"] });
+//	var node4 = new SumOfUs.TrackNode({ directions : ["F"] });
+//	var node5 = new SumOfUs.TrackNode({ directions : [npcdir] });
+//
+//	node1.connectTo(node2).along("A", "D");
+//	node1.connectTo(node3).along("B", "E");
+//	node1.connectTo(node4).along("C", "F");
+//	node1.connectTo(node5).along(npcdir);
+//
+//	var links = node1.links(neutraldir);
+//	expect(links.length).toEqual(3);
+//	expect(node1).toBeConnectedTo(node2, neutraldir, "D");
+//	expect(node1).toBeConnectedTo(node3, neutraldir, "E");
+//	expect(node1).toBeConnectedTo(node4, neutraldir, "F");
+//	expect(links).not.toContainSomethingWithProperties({node : node5});
+//    });
 
     it("should throw exceptions when non-existing directions are used when connecting", 
                                                                               function(){
@@ -150,22 +151,27 @@ describe("a TrackSegment", function() {
 	it("should have the nodes connected correctly", function(){
 	    var road = new SumOfUs.TrackSegment("road", {length : 5, width : 3});
 	    var nodes = road.get("nodes");
+	    var neutraldir = SumOfUs.NEUTRAL_DIRECTION;
 
 	    for(var i = 0; i < 5; i++){
 	        for(var j = 0; j < 3; j++){
 	            if(i < 4){
    	                expect(nodes[i][j]).toBeConnectedTo(nodes[i+1][j],"one->two","one->two");
+   	                expect(nodes[i][j]).toBeConnectedTo(nodes[i+1][j],neutraldir,"one->two");
 	            }
 	            if(i > 0){
 	                expect(nodes[i][j]).toBeConnectedTo(nodes[i-1][j],"two->one","two->one");
+	                expect(nodes[i][j]).toBeConnectedTo(nodes[i-1][j],neutraldir,"two->one");
 	            }
 	            if(j < 2){
 	                expect(nodes[i][j]).toBeConnectedTo(nodes[i][j+1],"one->two","one->two");
 	                expect(nodes[i][j]).toBeConnectedTo(nodes[i][j+1],"two->one","two->one");
+	                expect(nodes[i][j]).toBeConnectedTo(nodes[i][j+1],neutraldir,neutraldir);
 	            }
 	            if(j > 0){
 	                expect(nodes[i][j]).toBeConnectedTo(nodes[i][j-1],"one->two","one->two");
 	                expect(nodes[i][j]).toBeConnectedTo(nodes[i][j-1],"two->one","two->one");
+	                expect(nodes[i][j]).toBeConnectedTo(nodes[i][j-1],neutraldir,neutraldir);
 	            }
 	        }
 	    }
@@ -175,12 +181,13 @@ describe("a TrackSegment", function() {
 	    var road = new SumOfUs.TrackSegment("road", {length : 3, width : 4});
 	    var nodes = road.get("nodes");
 	    var endPoints = road.get("endPoints");
+	    var neutraldir = SumOfUs.NEUTRAL_DIRECTION;
 
 	    expect(endPoints.one.nodes.length).toEqual(4);
-	    expect(endPoints.one.leavingDirs).toEqual(["two->one"]);
+	    expect(endPoints.one.leavingDirs).toEqual(["two->one",neutraldir]);
 	    expect(endPoints.one.incomingDir).toEqual("one->two");
 	    expect(endPoints.two.nodes.length).toEqual(4);
-	    expect(endPoints.two.leavingDirs).toEqual(["one->two"]);
+	    expect(endPoints.two.leavingDirs).toEqual(["one->two",neutraldir]);
 	    expect(endPoints.two.incomingDir).toEqual("two->one");
 
             for(var i = 0; i < 4; i++){
@@ -249,6 +256,7 @@ describe("a TrackSegment", function() {
 	it("should have the nodes connected correctly", function(){
 	    var crossing = new SumOfUs.TrackSegment("crossing",{height : 3, width:4});
 	    var nodes = crossing.get("nodes");
+	    var neutraldir = SumOfUs.NEUTRAL_DIRECTION;
 
 	    for(var i = 0; i < 3; i++){
 	        for(var j = 0; j < 4; j++){
@@ -256,21 +264,25 @@ describe("a TrackSegment", function() {
 			expect(nodes[i][j]).toBeConnectedTo(nodes[i+1][j],"north","north");
 			expect(nodes[i][j]).toBeConnectedTo(nodes[i+1][j],"east","north");
 			expect(nodes[i][j]).toBeConnectedTo(nodes[i+1][j],"west","north");
+			expect(nodes[i][j]).toBeConnectedTo(nodes[i+1][j],neutraldir,"north");
 	 	    }
 		    if(i > 0){
 			expect(nodes[i][j]).toBeConnectedTo(nodes[i-1][j],"south","south");
 			expect(nodes[i][j]).toBeConnectedTo(nodes[i-1][j],"east","south");
 			expect(nodes[i][j]).toBeConnectedTo(nodes[i-1][j],"west","south");
+			expect(nodes[i][j]).toBeConnectedTo(nodes[i-1][j],neutraldir,"south");
 		    }
 		    if(j < 3){
 		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j+1],"north","east");
 		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j+1],"east","east");
 		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j+1],"south","east");
+		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j+1],neutraldir,"east");
 		    }
 		    if(j > 0){
 		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j-1],"north","west");
 		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j-1],"west","west");
 		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j-1],"south","west");
+		        expect(nodes[i][j]).toBeConnectedTo(nodes[i][j-1],neutraldir,"west");
 		    }
 	        }
 	    }
@@ -280,18 +292,19 @@ describe("a TrackSegment", function() {
 	    var crossing = new SumOfUs.TrackSegment("crossing",{height : 3, width:4});
 	    var nodes = crossing.get("nodes");
 	    var endPoints = crossing.get("endPoints");
+	    var neutraldir = SumOfUs.NEUTRAL_DIRECTION;
 
 	    expect(endPoints.north.nodes.length).toEqual(4);
-	    expect(endPoints.north.leavingDirs).toEqual(["north","east","west"]);
+	    expect(endPoints.north.leavingDirs).toEqual(["north","east","west",neutraldir]);
 	    expect(endPoints.north.incomingDir).toEqual("south");
 	    expect(endPoints.south.nodes.length).toEqual(4);
-	    expect(endPoints.south.leavingDirs).toEqual(["east","south","west"]);
+	    expect(endPoints.south.leavingDirs).toEqual(["east","south","west",neutraldir]);
 	    expect(endPoints.south.incomingDir).toEqual("north");
 	    expect(endPoints.east.nodes.length).toEqual(3);
-	    expect(endPoints.east.leavingDirs).toEqual(["north","east","south"]);
+	    expect(endPoints.east.leavingDirs).toEqual(["north","east","south",neutraldir]);
 	    expect(endPoints.east.incomingDir).toEqual("west");
 	    expect(endPoints.west.nodes.length).toEqual(3);
-	    expect(endPoints.west.leavingDirs).toEqual(["north","south","west"]);
+	    expect(endPoints.west.leavingDirs).toEqual(["north","south","west",neutraldir]);
 	    expect(endPoints.west.incomingDir).toEqual("east");
 
             for(var i = 0; i < 4; i++){
@@ -534,12 +547,12 @@ describe("a Track", function (){
 	});
 
 	it("should keep track of passed checkpoints", function(){
-	    var node1 = new SumOfUs.TrackNode({directions : "A"});
-	    var node2 = new SumOfUs.TrackNode({directions : "A", checkpoint : "a"});
-	    var node3 = new SumOfUs.TrackNode({directions : "A"});
-	    var node4 = new SumOfUs.TrackNode({directions : "A"});
-	    var node5 = new SumOfUs.TrackNode({directions : "A", checkpoint : "b"});
-	    var node6 = new SumOfUs.TrackNode({directions : "A"});
+	    var node1 = new SumOfUs.TrackNode({directions : ["A"]});
+	    var node2 = new SumOfUs.TrackNode({directions : ["A"], checkpoint : "a"});
+	    var node3 = new SumOfUs.TrackNode({directions : ["A"]});
+	    var node4 = new SumOfUs.TrackNode({directions : ["A"]});
+	    var node5 = new SumOfUs.TrackNode({directions : ["A"], checkpoint : "b"});
+	    var node6 = new SumOfUs.TrackNode({directions : ["A"]});
 	    node1.connectTo(node2).along("A");
 	    node2.connectTo(node3).along("A");
 	    node3.connectTo(node4).along("A");

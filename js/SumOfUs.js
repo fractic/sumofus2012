@@ -20,7 +20,7 @@
 	var crossings = [];
 	roads.push(demoTrack.addSegment("road", {width : 4, length : 12, checkpoint : "A", npcTraffic : "twoway"}));
 	roads.push(demoTrack.addSegment("road", {width : 4, length : 3, checkpoint :"B"}));
-	roads.push(demoTrack.addSegment("road", {width : 4, length : 3, checkPoint :"B"}));
+	roads.push(demoTrack.addSegment("road", {width : 4, length : 3, checkpoint :"B"}));
 	for(var i = 0; i < 6; i++){
 	    roads.push(demoTrack.addSegment("road", {width : 4, 
                                                      length : (i==0 | i==5)?3 : 5, 
@@ -230,7 +230,7 @@
 		carsPerTeam : 2,
 		secondsPerMove : 30,
                 pointsPerCheckpoint : 1,
-                checkpointOrder:["C","D","E","F","G","F","E","D","C","B","A"]
+                checkpointOrder:["C","D","E","F","G","F","E","D","C","B","A","B"]
 
 	});
 

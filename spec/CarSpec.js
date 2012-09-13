@@ -105,7 +105,7 @@ describe("a Car", function(){
 	expect(car).toHavePassedCheckpoints(["a","b","c"]);
     });
 
-    it("should have undefined direction when stopping, unless it's an npc", function(){
+    it("should have neutral direction when stopping, unless it's an npc", function(){
         var npcdir = SumOfUs.NPC_DIRECTION;
 	var node1 = new SumOfUs.TrackNode({directions : ["A"]});
 	var node2 = new SumOfUs.TrackNode({directions : ["A"]});
@@ -114,13 +114,13 @@ describe("a Car", function(){
         var npcCar = new SumOfUs.Car({npc : true});
 
 	car.moveTo(node1,"A",2);
-	expect(car).toHaveADefinedDirection();
+	expect(car).not.toHaveNeutralDirection();
 	car.decreaseSpeedTo(0);
-	expect(car).not.toHaveADefinedDirection();
+	expect(car).toHaveNeutralDirection();
 	car.moveTo(node2,"A",2);
-	expect(car).toHaveADefinedDirection();
+	expect(car).not.toHaveNeutralDirection();
 	car.moveTo(node1,"A",0);
-	expect(car).not.toHaveADefinedDirection();
+	expect(car).toHaveNeutralDirection();
 
 
 	npcCar.moveTo(node3,npcdir,2);

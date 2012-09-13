@@ -5,16 +5,20 @@
     //They consist of multiple nodes, and can be connected together.
     //Tracks represent the whole track, they consist of several segments.
 
-    const NPC_DIRECTION = "npc"
+    const NPC_DIRECTION = "npc";
+    const NEUTRAL_DIRECTION = "neutral";
 
     var TrackNode = Backbone.Model.extend({
         defaults : { occupiedBy : undefined,
 		             highlighted : false},
 
 	initialize : function(){
-	    if(this.get("directions") === undefined){
-                this.set("directions",[]);
+	    var dirs = this.get("directions");
+	    if(dirs === undefined){
+                dirs = [];
 	    };
+	    dirs.push(SumOfUs.NEUTRAL_DIRECTION);
+	    this.set("directions",dirs);
 	    this.set("connections",[]);
             this.set("views",[]);
 	},
@@ -79,7 +83,8 @@
 	links : function(direction){
 	    var res = [];
 	    for each (con in this.get("connections")){
-	        if(direction === con.inDir || (direction === undefined && con.inDir != NPC_DIRECTION)){
+	        //if(direction === con.inDir || (direction === undefined && con.inDir != NPC_DIRECTION)){
+		if(direction === con.inDir){
 		    res.push({ node : con.node, direction : con.outDir });
 		}
 	    }
@@ -159,18 +164,22 @@
 		}
 		
 	    }
+
+	    var neutraldir = SumOfUs.NEUTRAL_DIRECTION;
 	    
 	    for(var i = 0; i < length; i++){
 	        for(var j = 0; j < width; j++){
 		    if(i < length - 1){
-		        nodes[i][j].connectTwoWay(nodes[i+1][j],["one->two"],"one->two",
-		                                                ["two->one"],"two->one");
+		        nodes[i][j].connectTwoWay(nodes[i+1][j],["one->two",neutraldir],"one->two",
+		                                                ["two->one",neutraldir],"two->one");
 		    }
 		    if(j < width - 1){
 		        nodes[i][j].connectTwoWay(nodes[i][j+1],["one->two"],"one->two",
 			                                        ["one->two"],"one->two");
 		        nodes[i][j].connectTwoWay(nodes[i][j+1],["two->one"],"two->one",
 			                                        ["two->one"],"two->one");
+		        nodes[i][j].connectTwoWay(nodes[i][j+1],[neutraldir],neutraldir,
+			                                        [neutraldir],neutraldir);
 		    }
 		}
 	    }
@@ -200,14 +209,14 @@
 
 	    var endPoints = {};
 	    endPoints.one = {};
-	    endPoints.one.leavingDirs = ["two->one"];
+	    endPoints.one.leavingDirs = ["two->one",neutraldir];
 	    endPoints.one.incomingDir = "one->two";
 	    endPoints.one.nodes = []
 	    for(var i = 0; i < width; i++){
 	        endPoints.one.nodes.push(nodes[0][width-1-i]);
 	    }
 	    endPoints.two = {};
-	    endPoints.two.leavingDirs = ["one->two"];
+	    endPoints.two.leavingDirs = ["one->two",neutraldir];
 	    endPoints.two.incomingDir = "two->one";
 	    endPoints.two.nodes = []
 	    for(var i = 0; i < width; i++){
@@ -245,15 +254,17 @@
 		    nodes[i].push(new TrackNode({directions : dirs}));
 		}
 	    }
+
+	    var neutraldir = SumOfUs.NEUTRAL_DIRECTION;
 	    for(var i = 0; i < height; i++){
 	        for(var j = 0; j < width; j++){
 		    if(i < height - 1){
-		        nodes[i][j].connectTwoWay(nodes[i+1][j],["north","east","west"],"north",
-		                                                ["east","south","west"],"south");
+		        nodes[i][j].connectTwoWay(nodes[i+1][j],["north","east","west",neutraldir],"north",
+		                                                ["east","south","west",neutraldir],"south");
 		    }
 		    if(j < width - 1){
-		        nodes[i][j].connectTwoWay(nodes[i][j+1],["north","east","south"],"east",
-			                                        ["north","south","west"],"west");
+		        nodes[i][j].connectTwoWay(nodes[i][j+1],["north","east","south",neutraldir],"east",
+			                                        ["north","south","west",neutraldir],"west");
 		    }
 		}
 	    }
@@ -283,28 +294,28 @@
 
 	    var endPoints = {};
 	    endPoints.north= {};
-	    endPoints.north.leavingDirs = ["north","east","west"];
+	    endPoints.north.leavingDirs = ["north","east","west",neutraldir];
 	    endPoints.north.incomingDir = "south";
 	    endPoints.north.nodes = []
 	    for(var i = 0; i < width; i++){
 	        endPoints.north.nodes.push(nodes[height-1][i]);
 	    }
 	    endPoints.east = {};
-	    endPoints.east.leavingDirs = ["north","east","south"];
+	    endPoints.east.leavingDirs = ["north","east","south",neutraldir];
 	    endPoints.east.incomingDir = "west";
 	    endPoints.east.nodes = []
 	    for(var i = 0; i < height; i++){
 	        endPoints.east.nodes.push(nodes[height-1-i][width-1]);
 	    }
 	    endPoints.south= {};
-	    endPoints.south.leavingDirs = ["east","south","west"];
+	    endPoints.south.leavingDirs = ["east","south","west",neutraldir];
 	    endPoints.south.incomingDir = "north";
 	    endPoints.south.nodes = []
 	    for(var i = 0; i < width; i++){
 	        endPoints.south.nodes.push(nodes[0][width-1-i]);
 	    }
 	    endPoints.west = {};
-	    endPoints.west.leavingDirs = ["north","south","west"];
+	    endPoints.west.leavingDirs = ["north","south","west",neutraldir];
 	    endPoints.west.incomingDir = "east";
 	    endPoints.west.nodes = []
 	    for(var i = 0; i < height; i++){
@@ -471,6 +482,10 @@
 			var roadObject = this.paper().rect(x, y, length, height, edge);
 			roadObject.attr("stroke", "gray");
 			roadObject.attr("fill", "white");
+
+			//if(this.model.get("checkpoint") != undefined){
+			//    this.paper().text(x+length/2,y+height/2,this.model.get("checkpoint"));
+			//}
 
 			var callback = this.options.callback;
 			var node = this.model;
@@ -995,6 +1010,7 @@
 	});
 
     SumOfUs.NPC_DIRECTION = NPC_DIRECTION;
+    SumOfUs.NEUTRAL_DIRECTION = NEUTRAL_DIRECTION;
     SumOfUs.TrackNode = TrackNode;
     SumOfUs.TrackSegment = TrackSegment;
     SumOfUs.Track = Track;

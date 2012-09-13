@@ -185,7 +185,8 @@ describe("a Game", function(){
 	    game.playerClickedOnNode(nodes[0][3]);
 	    game.playerClickedOnNode(nodes[0][3]);
 	    expect(cars[0][0]).toHaveSpeed(1);
-	    expect(cars[0][0]).not.toHaveADefinedDirection();
+	    expect(cars[0][0]).toHaveNeutralDirection();
+	    //expect(cars[0][0]).not.toHaveADefinedDirection();
 	});
 
 	it("should highlight possible moves", function(){
@@ -258,6 +259,7 @@ describe("a Game", function(){
 	    expect(nodes[0][3]).not.toBeOccupied();
 	    expect(nodes[2][3]).not.toBeOccupied();
 	    expect(nodes[4][3]).not.toBeOccupied();
+
 
 	    game.playerClickedOnNode(nodes[0][0]);
 	    game.playerClickedOnNode(nodes[0][0]);
