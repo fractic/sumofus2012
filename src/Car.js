@@ -131,14 +131,32 @@
 
 			carSet.push(carObject);
 
-			if (this.model.hasUpgradedAcceleration()) {
-				carObject = this.paper().rect(
-					bx+1, by + 2/5*carHeight, carWidth, carHeight/5
-				);
-				carObject.attr("stroke", "black");
-				carObject.attr("fill", "black");
-				carSet.push(carObject);
-			}
+			/* Direction */
+			carObject = this.paper().text(
+				position.x + 3/8*carWidth, position.y+0.5, ">"
+			);
+			carSet.push(carObject);
+			
+			/* Acceleration */
+			this.upgradedAccelerationObject = this.paper().set();
+
+			carObject = this.paper().rect(
+				bx+1, by + 2/5*carHeight, carWidth, carHeight/5
+			);
+			carObject.attr("stroke", "black");
+			carObject.attr("fill", "black");
+			carSet.push(carObject);
+			this.upgradedAccelerationObject.push(carObject);
+
+			carObject = this.paper().text(
+				position.x + 3/8*carWidth, position.y+0.5, ">"
+			);
+			carObject.attr("fill", "white");
+			carObject.attr("stroke", "white");
+			carSet.push(carObject);
+			this.upgradedAccelerationObject.push(carObject);
+
+			this.upgradedAccelerationObject.hide();
 
 
 			/* Roof of car */
@@ -174,30 +192,28 @@
 			carObject.attr("fill", "black");
 			carSet.push(carObject);
 
-			/* Uitlaat */
-			if (this.model.hasUpgradedSpeed()) {
-				carObject = this.paper().rect(
-					bx-1, by + 1/6*carHeight, 2, 1/6*carHeight
-				);
-				carObject.attr("fill", "black");
-				carObject.attr("stroke", "black");
-				carSet.push(carObject);
-
-				carObject = this.paper().rect(
-					bx-1, by + 4/6*carHeight, 2, 1/6*carHeight
-				);
-				carObject.attr("fill", "black");
-				carObject.attr("stroke", "black");
-				carSet.push(carObject);
-			}
-
-
-			/* Direction */
-			carObject = this.paper().text(
-				position.x + 3/8*carWidth, position.y, ">"
+			/* Uitlaat - Speed upgrade */
+			this.upgradedSpeedObject = this.paper().set();
+			
+			carObject = this.paper().rect(
+				bx-1, by + 1/6*carHeight, 2, 1/6*carHeight
 			);
+			carObject.attr("fill", "black");
+			carObject.attr("stroke", "black");
 			carSet.push(carObject);
+			this.upgradedSpeedObject.push(carObject);
 
+			carObject = this.paper().rect(
+				bx-1, by + 4/6*carHeight, 2, 1/6*carHeight
+			);
+			carObject.attr("fill", "black");
+			carObject.attr("stroke", "black");
+			carSet.push(carObject);
+			this.upgradedSpeedObject.push(carObject);
+
+			this.upgradedSpeedObject.hide();
+
+			/* Transformations in correct direction */
 			carSet.transform("...R"+angle+","+position.x+","+position.y);
 
 			carObject = this.paper().text(
@@ -229,6 +245,7 @@
 
 		render : function() {
 			var position = this.model.get("position").get("views")[0].getCenter();
+		
 			var tx = position.x - this.currentPosition.x;
 			var ty = position.y - this.currentPosition.y;
 			this.element.transform("...T"+tx+","+ty);
@@ -259,6 +276,17 @@
 			if (this.model.get("highlighted"))
 				this.carGlow = this.carFoundation.glow({width : 10, color : "red"});
 			
+			if (this.model.hasUpgradedSpeed()) {
+				this.upgradedSpeedObject.show();
+			} else {
+				this.upgradedSpeedObject.hide();
+			}
+
+			if (this.model.hasUpgradedAcceleration()) {
+				this.upgradedAccelerationObject.show();
+			} else {
+				this.upgradedAccelerationObject.hide();
+			}
 
                         return this;
 		},
