@@ -159,12 +159,13 @@
             var nrCars = this.get("carsPerTeam");
             for(var i = 0; i < nrTeams; i++){
                 for(var j = 0; j < nrCars; j++){
-                    if(Math.random() < rounds*0.01){
-                        console.log("upgraded: ", i,j);
+                    if(Math.random() < 0.01+rounds*0.0025){
+
+                        console.log("upgraded speed of: ", i,j);
                         this.giveSpeedUpgradeTo(i,j);
                     }
-                    if(Math.random() < rounds*0.01){
-                        console.log("upgraded: ", i,j);
+                    if(Math.random() < 0.01+rounds*0.0025){
+                        console.log("upgraded acceleration of: ", i,j);
                         this.giveAccelerationUpgradeTo(i,j);
                     }
                 }

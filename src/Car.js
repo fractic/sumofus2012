@@ -274,7 +274,7 @@
 			if (this.carGlow != undefined)
 				this.carGlow.remove();
 			if (this.model.get("highlighted"))
-				this.carGlow = this.carFoundation.glow({width : 10, color : "red"});
+				this.carGlow = this.carFoundation.glow({width : 20,opacity : 0.8, color : "red"});
 			
 			if (this.model.hasUpgradedSpeed()) {
 				this.upgradedSpeedObject.show();

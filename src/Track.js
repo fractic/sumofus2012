@@ -421,7 +421,7 @@
 	    var car = new SumOfUs.Car({npc : true, 
 	                               maxSpeed : this.get("npcMaxSpeed"),
 				       delayChance : this.get("npcDelayChance"),
-				       color : "lightgrey"});
+				       color : "#eeeeee"});
 	    if(node.get("directions").indexOf(NPC_DIRECTION) == -1){
 	        throw "Can't add npc car on node without npc direction";
 	    }
@@ -489,12 +489,11 @@
                 },
 
 		render : function() {
-			if (this.trackGlow != undefined)
-				this.trackGlow.remove();
-			if (this.model.get("highlighted")) {
-				this.trackGlow = this.element.glow({width : 10, color : "black"})
-				//this.element.attr("fill", "gray");
-			} 
+                        if(this.model.get("highlighted")){
+                            this.element.attr("fill","b8ffb8");
+                        } else {
+                            this.element.attr("fill","white");
+                        }
 			return this;
 		},
 
@@ -615,7 +614,7 @@
 					roadObject = this.paper().rect(
 						x-5, y-1, 10, 2
 					);
-					roadObject.attr("fill", "black");
+					roadObject.attr("fill", "grey");
 					roadSet.push(roadObject);
 				}
 			}
@@ -695,7 +694,7 @@
 					roadObject = this.paper().rect(
 						x-5, y-1, 10, 2
 					);
-					roadObject.attr("fill", "black");
+					roadObject.attr("fill", "grey");
 					roadSet.push(roadObject);
 				}
 			}
@@ -775,7 +774,7 @@
 					roadObject = this.paper().rect(
 						x-1, y-5, 2, 10
 					);
-					roadObject.attr("fill", "black");
+					roadObject.attr("fill", "grey");
 					roadSet.push(roadObject);
 				}
 			}
@@ -855,7 +854,7 @@
 					roadObject = this.paper().rect(
 						x-1, y-5, 2, 10
 					);
-					roadObject.attr("fill", "black");
+					roadObject.attr("fill", "grey");
 					roadSet.push(roadObject);
 				}
 			}
@@ -963,7 +962,7 @@
 					crossingObject = this.paper().rect(
 						x-5, y-1, 10, 2
 					);
-					crossingObject.attr("fill", "black");
+					crossingObject.attr("fill", "lightgrey");
 					
 					crossingSet.push(crossingObject);
 				}
@@ -977,7 +976,7 @@
 					crossingObject = this.paper().rect(
 						x-1, y-5, 2, 10
 					);
-					crossingObject.attr("fill", "black");
+					crossingObject.attr("fill", "lightgrey");
 
 					crossingSet.push(crossingObject);
 				}
