@@ -405,7 +405,6 @@
 				 carHeight : 17 });
 	}
 
-	demoGame.start();
 
 	var timerView = new SumOfUs.TimerView({
 			     model: demoGame.get("timer"),
@@ -426,10 +425,21 @@
                                                 y : 10,
                                                 height : 200});
 
-        var path = paper.path("M600,580h20,v30,h10,l-20,20 -20,-20h10v-20z");
-        path.attr({fill : "blue"});
-        var path2 = paper.path("M105,136.875 v20h-20v10l-20,-20 20,-20v10h20");
-        path2.attr({fill : "#65c3ff"});
+        var lowerPointer = paper.path("M600,580h20,v30,h10,l-20,20 -20,-20h10v-20z");
+        lowerPointer.attr({fill : "blue"});
+        var upperPointer = paper.path("M600,190h20,v-30,h10,l-20,-20 -20,20h10v20z");
+        upperPointer.attr({fill : "blue"});
+
+	var goalView = new SumOfUs.GoalView({ model : demoGame,
+	                                      paper : paper,
+					      pointer1 : lowerPointer,
+					      pointer2 : upperPointer,
+					      modulus : 12,
+					      intervalStart : 5,
+					      intervalEnd : 10});
+
+
+	demoGame.start();
         window.game = demoGame;
 
 

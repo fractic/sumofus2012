@@ -286,10 +286,12 @@
             
             var colorBoxes = [];
             var scoreBoxes = [];
+	    var turnArrows = [];
             for(var i = 0; i < nrTeams; i++){
                 var colorBox = this.paper().rect(x,y+30+i*(boxSize+5),boxSize,boxSize);
                 colorBox.attr("stroke","black");
-                colorBox.attr("fill",this.model.get("playerCars")[i][0].get("color"));
+		var color = this.model.get("playerCars")[i][0].get("color");
+                colorBox.attr("fill",color);
                 colorBoxes.push(colorBox);
 
                 var scoreBox = this.paper().text(x+boxSize/2,
@@ -297,7 +299,13 @@
                                                   "0");
                 scoreBox.transform("S3");
                 scoreBoxes.push(scoreBox);
+
+                var arrow = this.paper().path("M"+(x+boxSize+50)+","+(y+40+i*(boxSize+5))+"v20h-20v10l-20,-20 20,-20v10h20");
+		arrow.attr("fill",color);
+		arrow.hide();
+		turnArrows.push(arrow);
             }
+	    this.turnArrows = turnArrows;
             return scoreBoxes;
         },
 
@@ -312,7 +320,9 @@
                }
                this.scoreBoxes[i].attr("text",""+teamscore);
             }
-
+	    var turn = this.model.get("currentTurn")[0];
+	    this.turnArrows[turn].show();
+	    this.turnArrows[(turn+3)%4].hide();
         },
 
         paper : function(){
@@ -344,7 +354,37 @@
         paper : function(){
             return this.options.paper;
         }
-        
+    });
+
+    var GoalView = Backbone.View.extend({
+        initialize : function(){
+	    this.createView();
+	    this.model.bind("change", function(){
+	        this.render();
+	    }, this);
+	},
+	
+	createView : function(){
+	    this.options.pointer1.hide();
+	    this.options.pointer2.hide();
+	    this.render();
+	},
+
+	render : function(){
+	    var turn = this.model.get("currentTurn");
+	    var score = this.model.get("scores")[turn[0]][turn[1]] % this.options.modulus;
+	    if(score < this.options.intervalStart || score > this.options.intervalEnd){
+	        this.options.pointer1.show();
+		this.options.pointer2.hide();
+	    } else {
+	        this.options.pointer1.hide();
+		this.options.pointer2.show();
+	    }
+	},
+
+	paper : function(){
+	    return this.options.paper;
+	}
     });
 
 
@@ -352,6 +392,7 @@
     SumOfUs.Game = Game;
     SumOfUs.ScoreView = ScoreView;
     SumOfUs.RoundView = RoundView;
+    SumOfUs.GoalView = GoalView;
 
 
 })(_, Backbone, SumOfUs);
