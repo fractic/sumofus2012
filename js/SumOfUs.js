@@ -11,7 +11,7 @@
     })();
 
     $(function(){
-        var paper = Raphael("viewport", 1300, 830);
+        var paper = Raphael("viewport", 1230, 770);
         paper.rect(0, 0, 1300, 830).attr({ fill : "#ffffff" });
 
 	var demoTrack = new SumOfUs.Track({npcMaxSpeed : 4,npcDelayChance: 0.12});
@@ -319,34 +319,74 @@
 	    });
         }
 
-//	var randomPositions = [
-//		{x : 250 + parseInt(Math.random() * 25), 
-//		 y : 250 + parseInt(Math.random() * 25)},
-//		{x : 375 + parseInt(Math.random() * 25), 
-//		 y : 250 + parseInt(Math.random() * 25)},
-//		{x : 250 + parseInt(Math.random() * 25), 
-//		 y : 375 + parseInt(Math.random() * 25)},
-//		{x : 375 + parseInt(Math.random() * 25), 
-//		 y : 375 + parseInt(Math.random() * 25)},
-//		{x : 700 + parseInt(Math.random() * 55), 
-//		 y : 100 + parseInt(Math.random() * 25)},
-//		{x : 700 + parseInt(Math.random() * 25), 
-//		 y : 200 + parseInt(Math.random() * 25)},
-//		{x : 700 + parseInt(Math.random() * 55), 
-//		 y : 300 + parseInt(Math.random() * 25)},
-//		{x : 700 + parseInt(Math.random() * 55), 
-//		 y : 400 + parseInt(Math.random() * 25)},
-//		{x : 700 + parseInt(Math.random() * 55), 
-//		 y : 500 + parseInt(Math.random() * 25)},
-//	];
-//
-//	for (var i = 0; i < randomPositions.length; i++)
-//		new SumOfUs.TreeView({
-//			paper : paper,
-//			position : randomPositions[i],
-//			color : "lightgreen",
-//			ratio : 30,
-//		});
+	var randomPositions = [
+		{x : 190 + parseInt(Math.random() * 25), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 250 + parseInt(Math.random() * 25), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 480 + parseInt(Math.random() * 25), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 550 + parseInt(Math.random() * 25), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 670 + parseInt(Math.random() * 25), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 740 + parseInt(Math.random() * 25), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 940 + parseInt(Math.random() * 25), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 1000 + parseInt(Math.random() * 55), 
+		 y : 160 + parseInt(Math.random() * 25)},
+		{x : 40 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 190 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 260 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 330 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 400 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 460 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 520 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 740 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 810 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 880 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 940 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 1000 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 1160 + parseInt(Math.random() * 25), 
+		 y : 370 + parseInt(Math.random() * 25)},
+		{x : 190 + parseInt(Math.random() * 25), 
+		 y : 580 + parseInt(Math.random() * 25)},
+		{x : 250 + parseInt(Math.random() * 25), 
+		 y : 580 + parseInt(Math.random() * 25)},
+		{x : 480 + parseInt(Math.random() * 25), 
+		 y : 580 + parseInt(Math.random() * 25)},
+		{x : 550 + parseInt(Math.random() * 25), 
+		 y : 580 + parseInt(Math.random() * 25)},
+		{x : 670 + parseInt(Math.random() * 25), 
+		 y : 580 + parseInt(Math.random() * 25)},
+		{x : 740 + parseInt(Math.random() * 25), 
+		 y : 580 + parseInt(Math.random() * 25)},
+		{x : 940 + parseInt(Math.random() * 25), 
+		 y : 580 + parseInt(Math.random() * 25)},
+		{x : 1000 + parseInt(Math.random() * 55), 
+		 y : 580 + parseInt(Math.random() * 25)},
+	];
+
+	for (var i = 0; i < randomPositions.length; i++)
+		new SumOfUs.TreeView({
+			paper : paper,
+			position : randomPositions[i],
+			color : "lightgreen",
+			ratio : 30,
+		});
 
         for(var team = 0; team < 4; team++){
 	    for(var car = 0; car < 2; car++){
@@ -370,21 +410,26 @@
 	var timerView = new SumOfUs.TimerView({
 			     model: demoGame.get("timer"),
 			     paper : paper, 
-			     x : 1140, 
-			     y : 50,
+			     x : 1080, 
+			     y : 20,
 			     height : 15,
 			     width : 100 });
 
         var roundView = new SumOfUs.RoundView({ model : demoGame,
                                                 paper : paper,
-                                                x : 1200,
-                                                y : 100});
+                                                x : 1140,
+                                                y : 70});
  
         var scoreView = new SumOfUs.ScoreView({ model : demoGame,
                                                 paper : paper,
                                                 x : 10,
                                                 y : 10,
                                                 height : 200});
+
+        var path = paper.path("M600,580h20,v30,h10,l-20,20 -20,-20h10v-20z");
+        path.attr({fill : "blue"});
+        var path2 = paper.path("M105,136.875 v20h-20v10l-20,-20 20,-20v10h20");
+        path2.attr({fill : "#65c3ff"});
         window.game = demoGame;
 
 
