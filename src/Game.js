@@ -62,6 +62,10 @@
 	},
 
 	setupNextTurn : function(){
+	    this.setupPlayerCarMove();
+	},
+
+	setupPlayerCarMove : function(){
 	    var turn = this.get("currentTurn");
 	    var car = this.get("playerCars")[turn[0]][turn[1]]
 	    if(this.get("roundsCompleted") > 0){
@@ -229,25 +233,32 @@
 	timeOut : function(){
 	    var status = this.get("status");
 	    var turn = this.get("currentTurn");
-	    var car = this.get("playerCars")[turn[0]][turn[1]]
+	    var cars = this.get("playerCars");
+	    var car = cars[turn[0]][turn[1]]
 	    if(status == "waiting for player car move"){
 	        var potentialMoves = this.get("potentialMoves");
 		for each(var move in potentialMoves){
 		    move.node.changeHighlight(false);
 		}
 		car.changeHighlight(false);
-	        while(this.get("currentTurn")[1] != this.get("carsPerTeam") -1){
+	        while(turn[1] != this.get("carsPerTeam") -1){
+		    cars[turn[0]][turn[1]].decreaseSpeedTo(0);
 		    this.advanceTurn();
+		    turn = this.get("currentTurn");
 		}
+		cars[turn[0]][turn[1]].decreaseSpeedTo(0);
 		this.advanceTurn();
 		this.setupNextTurn();
 	    } else if( status == "waiting for confirmation of car move"){
 		var move = this.get("selectedMove");
 		move.node.changeHighlight(false);
 		car.changeHighlight(false);
-	        while(this.get("currentTurn")[1] != this.get("carsPerTeam") -1){
+	        while(turn[1] != this.get("carsPerTeam") -1){
+		    cars[turn[0]][turn[1]].decreaseSpeedTo(0);
 		    this.advanceTurn();
+		    turn = this.get("currentTurn");
 		}
+		cars[turn[0]][turn[1]].decreaseSpeedTo(0);
 		this.advanceTurn();
 		this.setupNextTurn();
 	    }

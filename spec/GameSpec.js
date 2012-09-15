@@ -281,18 +281,26 @@ describe("a Game", function(){
 	    game.assignLocationToPlayerCar(1,1,nodes[0][3],"one->two");
 	    game.start();
 
+	    var cars = game.get("playerCars");
+
 	    game.playerClickedOnNode(nodes[1][0]);
 	    game.playerClickedOnNode(nodes[1][0]);
 	    expect(game).toBeAtTurn([0,1]);
 	    game.timeOut();
 	    expect(game).toBeAtTurn([1,0]);
-
-
+	    expect(cars[0][0]).toHaveSpeed(1);
+	    expect(cars[0][1]).toHaveSpeed(0);
+	    expect(cars[0][0]).not.toHaveNeutralDirection();
+	    expect(cars[0][1]).toHaveNeutralDirection();
 
 	    game.playerClickedOnNode(nodes[1][2]);
 	    game.timeOut();
 	    expect(game).toBeAtTurn([0,0]);
 	    expect(game).toHaveCompletedRounds(1);
+	    expect(cars[1][0]).toHaveSpeed(0);
+	    expect(cars[1][1]).toHaveSpeed(0);
+	    expect(cars[1][0]).toHaveNeutralDirection();
+	    expect(cars[1][1]).toHaveNeutralDirection();
 	});
     });
 
