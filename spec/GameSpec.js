@@ -27,6 +27,9 @@ describe("a Game", function(){
 	expect(game.get("pointsPerCheckpoint")).toEqual(10);
 	expect(game.get("checkpointOrder")).toEqual(["A","B"]);
 	expect(game.get("secondsPerMove")).toEqual(30);
+	expect(game.get("totalRounds")).toEqual(30);
+	expect(game.get("roundsBetweenBreaks")).toEqual(5);
+	expect(game.get("breakLength")).toEqual(180);
 	var scores = game.get("scores");
 	
 	for(var team = 0; team < 4; team++){

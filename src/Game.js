@@ -7,7 +7,10 @@
 	    playerDefaultMaxSpeed : 5,
 	    playerDefaultAcceleration : 1,
 	    pointsPerCheckpoint : 10,
-	    secondsPerMove : 30
+	    secondsPerMove : 30,
+	    totalRounds : 30,
+	    roundsBetweenBreaks : 5,
+	    breakLength : 180
 	},
 
 	initialize : function(){
@@ -37,6 +40,7 @@
 	    }
 
 	    this.set("timer",new SumOfUs.Timer());
+	    this.set("breakTimer",new SumOfUs.Timer());
         },
 
 	assignLocationToPlayerCar : function(teamNumber, carNumber, position, direction){
@@ -59,10 +63,14 @@
 	    }
 
 	    this.setupNextTurn();
+            this.startBreakTimer();
 	},
 
 	setupNextTurn : function(){
-	    this.setupPlayerCarMove();
+	    var currentStatus = this.get("status");
+	    if(currentStatus != "break" && currentStatus != "game over"){
+		this.setupPlayerCarMove();
+	    }
 	},
 
 	setupPlayerCarMove : function(){
@@ -149,32 +157,20 @@
 		this.set("currentTurn",turn);
 	    } else {
 	        this.set("currentTurn",[0,0]);
-		this.set("roundsCompleted", this.get("roundsCompleted")+1);
 		this.completedARound();
 	    }
 	},
 
 	completedARound : function(){
+	    var rounds = this.get("roundsCompleted")+1;
+	    if( rounds == this.get("totalRounds")){
+	        this.set("status","game over");
+		return;
+	    } else if(rounds % this.get("roundsBetweenBreaks") == 0){
+	        this.set("status","break");
+	    }
+	    this.set("roundsCompleted", rounds);
 	    this.get("track").advanceNonPlayerCars();
-
-            //VERY TEMPORARY HACK REMOVE THIS!!!!!
-            var rounds = this.get("roundsCompleted");
-            var nrTeams = this.get("numberOfTeams");
-            var nrCars = this.get("carsPerTeam");
-            for(var i = 0; i < nrTeams; i++){
-                for(var j = 0; j < nrCars; j++){
-                    if(Math.random() < 0.01+rounds*0.0025){
-
-                        console.log("upgraded speed of: ", i,j);
-                        this.giveSpeedUpgradeTo(i,j);
-                    }
-                    if(Math.random() < 0.01+rounds*0.0025){
-                        console.log("upgraded acceleration of: ", i,j);
-                        this.giveAccelerationUpgradeTo(i,j);
-                    }
-                }
-            }
-
 	},
 
 	playerClickedOnNode : function(node){
@@ -274,6 +270,21 @@
 
 	resumeTimer : function(){
 	    this.get("timer").resume();
+	},
+
+	startBreakTimer : function(){
+	    this.get("breakTimer").start(
+	             (this.get("secondsPerMove")*this.get("numberOfTeams")*this.get("roundsBetweenBreaks")) +
+		     this.get("breakLength"), this.breakEnd.bind(this));
+	},
+
+	breakEnd : function(){
+	    if(this.get("status") == "game over"){
+	        return;
+	    }
+	    this.set("status","ready to resume");
+            this.startBreakTimer();
+	    this.setupNextTurn();
 	}
 
     });
@@ -351,14 +362,14 @@
 
         createView : function(){
             var round = this.model.get("roundsCompleted");
-            var text = this.paper().text(this.options.x, this.options.y, "Ronde: "+round);
+            var text = this.paper().text(this.options.x, this.options.y, "Ronde: "+(round+1));
             text.transform("S3");
             return text;
         },
 
         render : function(){
             var round = this.model.get("roundsCompleted");
-            this.text.attr("text", "Ronde: "+round);
+            this.text.attr("text", "Ronde: "+(round+1));
             return this;
         },
 
@@ -398,12 +409,76 @@
 	}
     });
 
+    var BreakView = Backbone.View.extend({
+        initialize : function(){
+	    this.createView();
+	    this.model.bind("change", function(){
+	        this.render();
+	    }, this);
+	    this.timer = this.model.get("breakTimer");
+	    this.timer.bind("change", function(){
+	        this.render();
+	    }, this);
+	},
+
+	createView : function(){
+	    this.rect = this.paper().rect( this.options.x, 
+	                                   this.options.y, 
+					   this.options.width, 
+					   this.options.height,10);
+	    this.rect.attr("stroke","black");
+	    this.rect.attr("fill","red");
+
+	    this.text = this.paper().text(this.options.x+this.options.width/2, 
+	                                  this.options.y+this.options.height/2, "Start");
+	    this.text.transform("S3");
+	    this.rect.hide();
+	    this.text.hide();
+	},
+
+	render : function(){
+	    var currentStatus = this.model.get("status");
+	    if(currentStatus == "game over"){
+	        this.text.attr("text","Einde");
+		this.rect.show();
+		this.rect.toFront();
+		this.text.show();
+		this.text.toFront();
+	    } else if(currentStatus == "break"){
+	        this.text.attr("text",this.remainingTime());
+		this.rect.show();
+		this.rect.toFront();
+		this.text.show();
+		this.text.toFront();
+	    } else {
+	        this.rect.hide();
+		this.text.hide();
+	    }
+	},
+
+	remainingTime : function(){
+	    var time = this.timer.get("duration")-this.timer.get("secondsElapsed");
+	    var minutes = Math.floor(time/60);
+	    var seconds = time % 60;
+	    if(seconds < 10){
+   	        return "Pauze\n "+minutes+":0"+seconds;
+	    } else {
+	        return "Pauze\n "+minutes+":"+seconds;
+	    }
+	},
+
+	paper : function(){
+	    return this.options.paper;
+	}
+    });
+
 
 
     SumOfUs.Game = Game;
     SumOfUs.ScoreView = ScoreView;
     SumOfUs.RoundView = RoundView;
     SumOfUs.GoalView = GoalView;
+    SumOfUs.BreakView = BreakView;
 
 
 })(_, Backbone, SumOfUs);

@@ -228,7 +228,8 @@
 		track : demoTrack, 
 		numberOfTeams : 4, 
 		carsPerTeam : 2,
-		secondsPerMove : 30,
+		secondsPerMove : 6,
+		breakLength : 60,
                 pointsPerCheckpoint : 1,
                 checkpointOrder:["C","D","E","F","G","F","E","D","C","B","A","B"]
 
@@ -437,6 +438,13 @@
 					      modulus : 12,
 					      intervalStart : 5,
 					      intervalEnd : 10});
+	
+	var breakView = new SumOfUs.BreakView({ model : demoGame,
+	                                        paper : paper,
+						x : 515,
+						y : 300,
+						width : 200,
+						height : 100});
 
 
 	demoGame.start();
