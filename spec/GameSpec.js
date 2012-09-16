@@ -381,3 +381,39 @@ describe("a Game", function(){
     });
 
 });
+
+describe("an upgradetool", function(){
+    it("should have proper defaults", function(){
+        var tool = new SumOfUs.UpgradeTool({game : "A"});
+	expect(tool.get("numberOfTeams")).toEqual(4);
+	expect(tool.get("numberOfUpgrades")).toEqual(4);
+	var upgrades = tool.get("upgrades");
+	for(var i = 0; i < 4; i++){
+	    for(var j = 0; j < 4; j++){
+	        expect(upgrades[i][j]).toEqual(false);
+	    }
+	}
+    });
+
+    it("should keep track of upgrades", function(){
+        game = { get : function(a){return "break";}};
+        var tool = new SumOfUs.UpgradeTool({game:game});
+	tool.toggleUpgrade(0,0);
+	tool.toggleUpgrade(1,2);
+	tool.toggleUpgrade(3,2);
+	tool.toggleUpgrade(2,1);
+	var upgrades = tool.get("upgrades");
+	expect(upgrades[0][0]).toEqual(true);
+	expect(upgrades[1][2]).toEqual(true);
+	expect(upgrades[3][2]).toEqual(true);
+	expect(upgrades[2][1]).toEqual(true);
+	expect(upgrades[2][3]).toEqual(false);
+	expect(upgrades[0][1]).toEqual(false);
+	expect(upgrades[3][0]).toEqual(false);
+
+	tool.toggleUpgrade(0,0);
+	expect(upgrades[0][0]).toEqual(false);
+	tool.toggleUpgrade(0,0);
+	expect(upgrades[0][0]).toEqual(true);
+    });
+});

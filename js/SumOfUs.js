@@ -228,9 +228,10 @@
 		track : demoTrack, 
 		numberOfTeams : 4, 
 		carsPerTeam : 2,
-		secondsPerMove : 6,
-		breakLength : 60,
+		secondsPerMove : 30,
+		breakLength : 180,
                 pointsPerCheckpoint : 1,
+		roundsBetweenBreaks : 5,
                 checkpointOrder:["C","D","E","F","G","F","E","D","C","B","A","B"]
 
 	});
@@ -445,6 +446,13 @@
 						y : 300,
 						width : 200,
 						height : 100});
+
+	var upgradeView = new SumOfUs.UpgradeView({ model : demoGame,
+	                                            paper : paper,
+						    x : 1100,
+						    y : 660,
+						    height : 100});
+
 
 
 	demoGame.start();

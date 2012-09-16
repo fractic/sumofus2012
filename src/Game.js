@@ -1,4 +1,46 @@
 (function(_, Backbone, SumOfUs, undefined){
+    var UpgradeTool = Backbone.Model.extend({
+        defaults : { 
+	    numberOfTeams : 4,
+	    numberOfUpgrades : 4
+	},
+        
+	initialize : function(){
+	    var upgrades = [];
+	    for(var i = 0; i < this.get("numberOfTeams"); i++){
+	        var list = [];
+		for(var j = 0; j < this.get("numberOfUpgrades"); j++){
+		   list.push(false);
+		}
+		upgrades.push(list);
+	    }
+	    this.set("upgrades",upgrades);
+	    this.set("toggleCounter",0);
+	    if(this.get("game") == undefined){
+	         throw "can't create upgradeTool without a game";
+	    }
+	},
+
+	toggleUpgrade : function(team, upgrade){
+	    var gameStatus = this.get("game").get("status");
+	    if(gameStatus != "break" && gameStatus != "not started"){
+	        return;
+	    }
+	    if(team >= this.get("numberOfTeams") || team < 0){
+	        throw "incorrect team number";
+	    }
+	    if(upgrade >= this.get("numberOfUpgrades") || upgrade < 0){
+	        throw "incorrect upgrade number";
+	    }
+
+	    var upgrades = this.get("upgrades");
+	    upgrades[team][upgrade] = !upgrades[team][upgrade];
+	    this.set("upgrades",upgrades);
+	    this.set("toggleCounter",this.get("toggleCounter")+1);//to create change events.
+	}
+
+    });
+
     var Game = Backbone.Model.extend({
         defaults : {
 	    numberOfTeams : 4,
@@ -38,7 +80,10 @@
 	    if(this.get("checkpointOrder") == undefined){
 	        this.set("checkpointOrder",["A","B"]);
 	    }
-
+              
+            this.set("upgradeTool", new UpgradeTool({numberOfTeams : this.get("numberOfTeams"),
+	                                             numberOfUpgrades : this.get("carsPerTeam")*2,
+						     game : this}));
 	    this.set("timer",new SumOfUs.Timer());
 	    this.set("breakTimer",new SumOfUs.Timer());
         },
@@ -62,6 +107,7 @@
 	       this.set("roundsCompleted", 0);
 	    }
 
+	    this.checkUpgrades();
 	    this.setupNextTurn();
             this.startBreakTimer();
 	},
@@ -207,6 +253,22 @@
 	    this.get("playerCars")[team][car].upgradeAcceleration();
 	},
 
+	checkUpgrades : function(){
+	    var upgrades = this.get("upgradeTool").get("upgrades");
+	    var nrTeams = this.get("numberOfTeams");
+	    var nrCars = this.get("carsPerTeam");
+	    for(var i = 0; i < nrTeams; i++){
+	       for(var j = 0; j < nrCars; j++){
+	          if(upgrades[i][2*j]){
+		      this.giveSpeedUpgradeTo(i,j);
+		  }
+	          if(upgrades[i][2*j+1]){
+		      this.giveAccelerationUpgradeTo(i,j);
+		  }
+	       }
+	    }
+	},
+
 	pause : function(){
 	    var currentStatus = this.get("status");
 	    if(currentStatus == "paused"){
@@ -283,9 +345,11 @@
 	        return;
 	    }
 	    this.set("status","ready to resume");
+	    this.checkUpgrades();
             this.startBreakTimer();
 	    this.setupNextTurn();
 	}
+
 
     });
 
@@ -472,13 +536,82 @@
 	}
     });
 
+    var UpgradeView = Backbone.View.extend({
+        initialize : function(){
+	    this.tool = this.model.get("upgradeTool");
+	    this.marks = this.createView();
+	    this.tool.bind("change", function(){
+	        this.render();
+	    }, this);
+	},
+
+	createView : function(){
+	    var nrTeams = this.tool.get("numberOfTeams");
+	    var nrUpgrades = this.tool.get("numberOfUpgrades");
+	    var x = this.options.x
+	    var y = this.options.y
+	    var h = this.options.height;
+	    var boxSize = (h-5*(nrTeams-1))/nrTeams;
+	    var boxes = [];
+	    var marks = [];
+	    function createCallback(i,j,tool){
+	         return function(){
+		     tool.toggleUpgrade(i,j);
+		 }
+	    }
+	    for(var i = 0; i < nrTeams; i++){
+	       var color = this.model.get("playerCars")[i][0].get("color");
+	       var boxRow = [];
+	       var markRow = [];
+	       for(var j = 0; j < nrUpgrades; j++){
+	           var box = this.paper().rect(x+(boxSize+5)*j,
+		                               y+(boxSize+5)*i,
+					       boxSize,
+					       boxSize);
+		   box.attr("fill",color);
+		   box.click(createCallback(i,j,this.tool));
+		   var mark = this.paper().circle(x+(boxSize+5)*j+boxSize/2,y+(boxSize+5)*i+boxSize/2,boxSize/4);
+		   mark.attr("fill","white");
+		   mark.click(createCallback(i,j,this.tool));
+		   mark.hide();
+		   boxRow.push(box);
+		   markRow.push(mark);
+
+	       }
+	       boxes.push(boxRow);
+	       marks.push(markRow);
+	    }
+	    return marks;
+	},
+
+	render : function(){
+	    var upgrades = this.tool.get("upgrades");
+	    var nrTeams = this.tool.get("numberOfTeams");
+	    var nrUpgrades = this.tool.get("numberOfUpgrades");
+	    for(var i = 0; i < nrTeams; i++){
+	        for(var j = 0; j < nrUpgrades; j++){
+		     if(upgrades[i][j]){
+		         this.marks[i][j].show();
+		     } else {
+		         this.marks[i][j].hide();
+		     }
+		}
+	    }
+	},
+
+	paper : function(){
+	    return this.options.paper;
+	}
+
+    });
+
 
 
     SumOfUs.Game = Game;
+    SumOfUs.UpgradeTool = UpgradeTool;
     SumOfUs.ScoreView = ScoreView;
     SumOfUs.RoundView = RoundView;
     SumOfUs.GoalView = GoalView;
     SumOfUs.BreakView = BreakView;
-
-
+    SumOfUs.UpgradeView = UpgradeView;
 })(_, Backbone, SumOfUs);
