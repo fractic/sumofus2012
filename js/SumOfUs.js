@@ -443,9 +443,14 @@
 						    height : 100});
 
 
-
-	demoGame.start();
-        window.game = demoGame;
+        var startButton = new SumOfUs.StartButton({ model : demoGame,
+	                                            paper : paper,
+						    x : 10,
+						    y : 650,
+						    width : 150,
+						    height : 100});
+	//demoGame.start();
+        //window.game = demoGame;
 
 
 

@@ -94,6 +94,9 @@
 	},
 
 	start : function(){
+	    if(this.get("status") != "not started"){
+	        return;
+	    }
 	    var cars = this.get("playerCars");
 	    for(var team = 0; team < this.get("numberOfTeams"); team++){
 	        for(var car = 0; car < this.get("carsPerTeam"); car++){
@@ -102,10 +105,8 @@
 		    }
 		}
 	    }
-	    if(this.get("status") == "not started"){
-	       this.set("currentTurn", [0,0]);
-	       this.set("roundsCompleted", 0);
-	    }
+	    this.set("currentTurn", [0,0]);
+	    this.set("roundsCompleted", 0);
 
 	    this.checkUpgrades();
 	    this.setupNextTurn();
@@ -605,6 +606,37 @@
 
     });
 
+    var StartButton = Backbone.View.extend({
+        initialize : function(){
+	    this.createView();
+	},
+
+	createView : function(){
+	    this.rect = this.paper().rect( this.options.x, 
+	                                   this.options.y, 
+					   this.options.width, 
+					   this.options.height,10);
+	    this.rect.attr("stroke","black");
+	    this.rect.attr("fill","red");
+
+	    this.text = this.paper().text(this.options.x+this.options.width/2, 
+	                                  this.options.y+this.options.height/2, "Start");
+	    this.text.transform("S3");
+	    this.rect.click(this.clicked.bind(this));
+	    this.text.click(this.clicked.bind(this));
+	},
+
+	clicked : function(){
+	    this.rect.hide();
+	    this.text.hide();
+	    this.model.start();
+	},
+	
+	paper : function(){
+	    return this.options.paper;
+	}
+    });
+
 
 
     SumOfUs.Game = Game;
@@ -614,4 +646,5 @@
     SumOfUs.GoalView = GoalView;
     SumOfUs.BreakView = BreakView;
     SumOfUs.UpgradeView = UpgradeView;
+    SumOfUs.StartButton = StartButton;
 })(_, Backbone, SumOfUs);
