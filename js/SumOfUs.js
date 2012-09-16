@@ -112,7 +112,6 @@
 
 	demoTrack.addNonPlayerCar(roads[3].get("nodes")[0][0]);
 	demoTrack.addNonPlayerCar(roads[3].get("nodes")[2][1]);
-	demoTrack.addNonPlayerCar(roads[3].get("nodes")[0][2]);
 	demoTrack.addNonPlayerCar(roads[3].get("nodes")[1][3]);
 	demoTrack.addNonPlayerCar(crossings[2].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(crossings[2].get("nodes")[3][1]);
@@ -126,15 +125,14 @@
 	demoTrack.addNonPlayerCar(roads[5].get("nodes")[0][3]);
 	demoTrack.addNonPlayerCar(crossings[4].get("nodes")[3][1]);
 	demoTrack.addNonPlayerCar(crossings[4].get("nodes")[0][1]);
-	demoTrack.addNonPlayerCar(crossings[4].get("nodes")[2][0]);
 	demoTrack.addNonPlayerCar(roads[6].get("nodes")[2][1]);
 	demoTrack.addNonPlayerCar(roads[6].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(roads[6].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(roads[6].get("nodes")[1][3]);
 	demoTrack.addNonPlayerCar(crossings[5].get("nodes")[0][3]);
 	demoTrack.addNonPlayerCar(crossings[5].get("nodes")[1][2]);
+	demoTrack.addNonPlayerCar(crossings[5].get("nodes")[2][2]);
 	demoTrack.addNonPlayerCar(crossings[5].get("nodes")[3][1]);
-	demoTrack.addNonPlayerCar(roads[7].get("nodes")[0][1]);
 	demoTrack.addNonPlayerCar(roads[7].get("nodes")[4][1]);
 	demoTrack.addNonPlayerCar(roads[7].get("nodes")[4][2]);
 	demoTrack.addNonPlayerCar(crossings[6].get("nodes")[1][1]);
@@ -150,20 +148,17 @@
 	demoTrack.addNonPlayerCar(roads[13].get("nodes")[0][0]);
 	demoTrack.addNonPlayerCar(roads[13].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(roads[13].get("nodes")[2][1]);
-	demoTrack.addNonPlayerCar(roads[13].get("nodes")[4][1]);
 	demoTrack.addNonPlayerCar(roads[13].get("nodes")[2][3]);
 	demoTrack.addNonPlayerCar(crossings[8].get("nodes")[0][0]);
 	demoTrack.addNonPlayerCar(crossings[8].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(crossings[8].get("nodes")[2][3]);
 	demoTrack.addNonPlayerCar(crossings[8].get("nodes")[3][0]);
 	demoTrack.addNonPlayerCar(roads[14].get("nodes")[1][0]);
-	demoTrack.addNonPlayerCar(roads[14].get("nodes")[4][0]);
 	demoTrack.addNonPlayerCar(roads[14].get("nodes")[2][1]);
 	demoTrack.addNonPlayerCar(roads[14].get("nodes")[2][2]);
 	demoTrack.addNonPlayerCar(roads[14].get("nodes")[2][3]);
 	demoTrack.addNonPlayerCar(crossings[9].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(crossings[9].get("nodes")[2][1]);
-	demoTrack.addNonPlayerCar(roads[15].get("nodes")[2][1]);
 	demoTrack.addNonPlayerCar(roads[15].get("nodes")[0][3]);
 	demoTrack.addNonPlayerCar(roads[15].get("nodes")[2][2]);
 	demoTrack.addNonPlayerCar(roads[15].get("nodes")[0][0]);
@@ -173,14 +168,12 @@
 	demoTrack.addNonPlayerCar(crossings[10].get("nodes")[3][2]);
 	demoTrack.addNonPlayerCar(roads[16].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(roads[16].get("nodes")[2][1]);
-	demoTrack.addNonPlayerCar(roads[16].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(roads[16].get("nodes")[1][3]);
 	demoTrack.addNonPlayerCar(crossings[11].get("nodes")[0][0]);
 	demoTrack.addNonPlayerCar(crossings[11].get("nodes")[1][0]);
 	demoTrack.addNonPlayerCar(crossings[11].get("nodes")[3][1]);
 	demoTrack.addNonPlayerCar(roads[17].get("nodes")[1][1]);
 	demoTrack.addNonPlayerCar(roads[17].get("nodes")[2][2]);
-	demoTrack.addNonPlayerCar(roads[17].get("nodes")[1][3]);
 
 	demoTrack.addNonPlayerCar(roads[21].get("nodes")[3][1]);
 	demoTrack.addNonPlayerCar(roads[21].get("nodes")[0][2]);
@@ -188,7 +181,6 @@
 	demoTrack.addNonPlayerCar(crossings[0].get("nodes")[3][0]);
 	demoTrack.addNonPlayerCar(crossings[0].get("nodes")[2][1]);
 	demoTrack.addNonPlayerCar(crossings[0].get("nodes")[1][3]);
-	demoTrack.addNonPlayerCar(crossings[0].get("nodes")[0][2]);
 	demoTrack.addNonPlayerCar(roads[0].get("nodes")[0][0]);
 	demoTrack.addNonPlayerCar(roads[0].get("nodes")[7][0]);
 	demoTrack.addNonPlayerCar(roads[0].get("nodes")[3][1]);
@@ -200,10 +192,8 @@
 	demoTrack.addNonPlayerCar(crossings[1].get("nodes")[2][2]);
 	demoTrack.addNonPlayerCar(crossings[1].get("nodes")[0][2]);
 	demoTrack.addNonPlayerCar(roads[22].get("nodes")[2][0]);
-	demoTrack.addNonPlayerCar(roads[22].get("nodes")[4][1]);
 	demoTrack.addNonPlayerCar(roads[22].get("nodes")[3][2]);
 
-	demoTrack.addNonPlayerCar(roads[23].get("nodes")[3][0]);
 	demoTrack.addNonPlayerCar(roads[23].get("nodes")[0][1]);
 	demoTrack.addNonPlayerCar(roads[23].get("nodes")[1][2]);
 	demoTrack.addNonPlayerCar(roads[23].get("nodes")[4][3]);
@@ -222,7 +212,6 @@
 	demoTrack.addNonPlayerCar(roads[24].get("nodes")[2][0]);
 	demoTrack.addNonPlayerCar(roads[24].get("nodes")[1][1]);
 	demoTrack.addNonPlayerCar(roads[24].get("nodes")[1][2]);
-	demoTrack.addNonPlayerCar(roads[24].get("nodes")[3][3]);
 
 	var demoGame = new SumOfUs.Game({
 		track : demoTrack, 
